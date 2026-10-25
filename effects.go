@@ -75,6 +75,8 @@ func (b *Broker[A, P]) parseEffect(s string) (effect, error) {
 		if err = want(2, 2); err == nil {
 			e.num, err = num(e.args[1])
 		}
+	case "clear":
+		err = want(1, 1)
 	case "destroy", "stop":
 		err = want(0, 0)
 	case "spawn":
@@ -114,6 +116,8 @@ func (b *Broker[A, P]) run(rc *Receptron, d Delivery[A, P]) (did, stop bool) {
 			b.SetFor(r, e.args[0], parseValue(e.args[1]), int(e.num))
 		case "add":
 			b.Add(r, e.args[0], e.num)
+		case "clear":
+			b.Clear(r, e.args[0])
 		case "destroy":
 			b.Destroy(r)
 		case "spawn":

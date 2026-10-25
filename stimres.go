@@ -232,8 +232,12 @@ func (b *Broker[A, P]) Emit(r Receiver[A], stim string) []Receiver[A] {
 }
 
 func (b *Broker[A, P]) emission(r Receiver[A], src *Source) Stimulus[A, P] {
-	return Stimulus[A, P]{Stim: src.Stim, Intensity: src.Intensity, Medium: src.Medium, Range: src.Range,
+	st := Stimulus[A, P]{Stim: src.Stim, Intensity: src.Intensity, Medium: src.Medium, Range: src.Range,
 		Falloff: src.Falloff, Origin: b.World.Locate(r), Source: &r, Extra: src.Extra}
+	if src.Medium == "self" {
+		st.Target = &r
+	}
+	return st
 }
 
 func (b *Broker[A, P]) drain() {

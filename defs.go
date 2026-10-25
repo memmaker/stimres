@@ -57,6 +57,7 @@ type def struct {
 //	emit STIM INTENSITY|same [MEDIUM|self] [RANGE] [FALLOFF] [key=value...]
 //	set PROP VALUE [TICKS]
 //	add PROP DELTA
+//	clear PROP              (back to the definitions' value)
 //	destroy
 //	spawn ARCHETYPE
 //	stop                    (no further receptrons for this delivery)
@@ -73,7 +74,8 @@ type Receptron struct {
 }
 
 // Source is what a receiver emits: periodically (Period ticks) while its
-// If conditions hold, or on Emit when Period is 0.
+// If conditions hold, or on Emit when Period is 0. Medium "self" delivers
+// it to the receiver alone.
 type Source struct {
 	Stim      string         `toml:"stim"`
 	Medium    string         `toml:"medium"`

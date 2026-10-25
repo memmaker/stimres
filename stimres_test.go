@@ -317,3 +317,35 @@ effects = ["call missing", "frobnicate"]
 		}
 	}
 }
+
+func TestSelfSourceAndClear(t *testing.T) {
+	g := &grid{terrain: map[cell]string{}, at: map[ID]pos{}}
+	b := New[cell, pos](g)
+	if err := b.Load(strings.NewReader(`
+[stim.drip]
+[archetype.tap]
+[[archetype.tap.source]]
+stim = "drip"
+medium = "self"
+period = 1
+[[archetype.tap.receptron]]
+stim = "drip"
+if = ["wet"]
+effects = ["clear wet"]
+[[archetype.tap.receptron]]
+stim = "drip"
+if = ["!wet"]
+effects = ["set wet true", "stop"]
+`)); err != nil {
+		t.Fatal(err)
+	}
+	tap := Object[cell](b.NewObject("tap"))
+	b.Step()
+	if !b.Bool(tap, "wet") {
+		t.Fatal("a self source reaches its own receiver")
+	}
+	b.Step()
+	if b.Bool(tap, "wet") {
+		t.Fatal("clear drops the override")
+	}
+}
