@@ -331,7 +331,7 @@ period = 1
 [[archetype.tap.receptron]]
 stim = "drip"
 if = ["wet"]
-effects = ["clear wet"]
+effects = ["clear wet", "stop"] # conditions are read as each receptron comes up
 [[archetype.tap.receptron]]
 stim = "drip"
 if = ["!wet"]
